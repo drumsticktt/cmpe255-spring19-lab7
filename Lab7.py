@@ -5,7 +5,7 @@ from mlxtend.plotting import plot_decision_regions
    
 
 plot_num = 1
-
+tf = open("KernelResults.txt", "a+")
 
 
 def create_svm(kernel='linear', degree=8):
@@ -49,15 +49,16 @@ def create_svm(kernel='linear', degree=8):
     # predictions
     y_pred = svclassifier.predict(X_test)  
 
+    global tf
+
     # Evaluate model
     from sklearn.metrics import classification_report, confusion_matrix 
-    print(kernel + " Kernel=================================================================\n")
-    print(confusion_matrix(y_test,y_pred))  
-    print(classification_report(y_test,y_pred)) 
+    tf.write(kernel + " Kernel=================================================================\n")
+    np.savetxt(tf, confusion_matrix(y_test,y_pred))
+    tf.write(classification_report(y_test,y_pred))
     
     global plot_num
 
-    print(np.array(X.values))
     value = 1.5
     width = 0.75
     plt.subplot(2,2, plot_num)
@@ -105,5 +106,5 @@ def test():
     # NOTE: 3-point extra credit for plotting three kernel models.
     plt.savefig("Kernal_Comparison.jpg")
     plt.waitforbuttonpress()
-
+    tf.close()
 test()
